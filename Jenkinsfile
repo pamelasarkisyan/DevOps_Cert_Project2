@@ -37,4 +37,9 @@ node("devops"){
      {
       sh ("docker run ${repoUrl}/${imgName}:${imageTag}")
      }
+  stage('Remove local images')
+     {
+      // optimise storage
+      sh("docker rmi -f ${repoUrl}/${imgName}:${imageTag} || :")
+     }
 }
