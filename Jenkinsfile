@@ -7,9 +7,6 @@ def dockerfile      = "Dockerfile"
 
 // Docker installed only on agent with devops label
 node("devops"){
-  stage ("Clean space") {
-      cleanWs()
-  }
 // Unhash below stage if pipeline script is hosted in Jenkins directly.
 //   stage ("Clone")
 //   {
@@ -42,4 +39,7 @@ node("devops"){
       // optimise storage
       sh("docker rmi -f ${repoUrl}/${imgName}:${imageTag} || :")
      }
+  stage ("Clean space") {
+      cleanWs()
+  }
 }
