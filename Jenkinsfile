@@ -7,13 +7,12 @@ def dockerfile      = "Dockerfile"
 
 // Docker installed only on agent with devops label
 node("devops"){
-// Unhash below stage if pipeline script is hosted in Jenkins directly.
-//   stage ("Clone")
-//   {
-//       withCredentials([string(credentialsId: 'public_github_pam', variable: 'public_github_pam')]) {
-//        sh ("git clone https://${public_github_pam}@github.com/pamelasarkisyan/DevOps_Cert_Project2.git")
-//       }
-//   }
+  stage ("Clone")
+  {
+      withCredentials([string(credentialsId: 'public_github_pam', variable: 'public_github_pam')]) {
+       sh ("git clone https://${public_github_pam}@github.com/pamelasarkisyan/DevOps_Cert_Project2.git")
+      }
+  }
   stage ('Build Docker Image')
      {
        sh ("cd DevOps_Cert_Project2 && docker build -t  ${imgName}:${imageTag} -f ${dockerfile} .")
