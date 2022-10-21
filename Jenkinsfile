@@ -10,21 +10,22 @@ node("devops"){
   stage ("Clean space") {
       cleanWs()
   }
-  stage ("Clone")
-  {
-      withCredentials([string(credentialsId: 'public_github_pam', variable: 'public_github_pam')]) {
-       sh ("git clone https://${public_github_pam}@github.com/pamelasarkisyan/DevOps_Cert_Project2.git")
-      }
-  }
+// Unhash below stage if pipeline script is hosted in Jenkins directly.
+//   stage ("Clone")
+//   {
+//       withCredentials([string(credentialsId: 'public_github_pam', variable: 'public_github_pam')]) {
+//        sh ("git clone https://${public_github_pam}@github.com/pamelasarkisyan/DevOps_Cert_Project2.git")
+//       }
+//   }
   stage ('Build Docker Image')
      {
        sh ("cd DevOps_Cert_Project2 && docker build -t  ${imgName}:${imageTag} -f ${dockerfile} .")
      }
-  stage ('tag Image With Build Number ')
+  stage ('Tag Image With Build Number ')
      {
        sh ("docker tag ${imgName}:${imageTag}  ${repoUrl}'/'${imgName}:${imageTag}")
      }
-   stage('Push Docker Image With Build Number To ECR')
+   stage('Login into Docker')
      {
         sh("docker login --username pamelasarkisyan --password dckr_pat_doOmQJRBXiSZ5ntMHBsOt2hMzso")   
      }   
@@ -32,8 +33,8 @@ node("devops"){
      {
         sh("docker push ${repoUrl}/${imgName}:${imageTag}")   
      }
-  stage ("Run Docker Container ")
+  stage ('Run Docker Container ')
      {
-      sh ("docker run ${repoUrl}/${imgName}:${imageTag} ")
+      sh ("docker run ${repoUrl}/${imgName}:${imageTag}")
      }
 }
